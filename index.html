@@ -1,307 +1,307 @@
+<!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine Plugins -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
   
-  <!-- Alpine Plugins -->
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
-
-  <!-- Alpine Core -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <link rel="manifest" href="manifest.json" />
-  <!-- ios support -->
-  <link rel="apple-touch-icon" href="images/icon-512x512.png" />
-  <meta name="apple-mobile-web-app-status-bar" content="#ffffff" />
-  <meta name="theme-color" content="#ffffff" />
-  <title>Lone Wolf Companion</title>
-</head>
-
-<body class="text-sm">
-  <div x-data="gamedata" class="flex flex-col gap-3 p-6">
-    <button @click="alert(random())" class="bg-black text-white rounded py-3">Random number</button>
-
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Combat System</legend>
-      <div class="flex flex-row gap-3">
-        <div class="w-6/12">
-          <label class="text-gray-500 text-xs">Enemy CS</label>
-          <input type="number" x-model="enemy.cs" class="w-full p-2 bg-gray-200 rounded mt-2">
+    <!-- Alpine Core -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="manifest" href="manifest.json" />
+    <!-- ios support -->
+    <link rel="apple-touch-icon" href="images/icon-512x512.png" />
+    <meta name="apple-mobile-web-app-status-bar" content="#ffffff" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Lone Wolf Companion</title>
+  </head>
+  
+  <body class="text-sm">
+    <div x-data="gamedata" class="flex flex-col gap-3 p-6">
+      <button @click="alert(random())" class="bg-black text-white rounded py-3">Random number</button>
+  
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Combat System</legend>
+        <div class="flex flex-row gap-3">
+          <div class="w-6/12">
+            <label class="text-gray-500 text-xs">Enemy CS</label>
+            <input type="number" x-model="enemy.cs" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
+          <div class="w-6/12">
+           <label class="text-gray-500 text-xs">Enemy EP</label>
+           <input type="number" x-model="enemy.ep" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
         </div>
-        <div class="w-6/12">
-         <label class="text-gray-500 text-xs">Enemy EP</label>
-         <input type="number" x-model="enemy.ep" class="w-full p-2 bg-gray-200 rounded mt-2">
+        <button @click="combat" class="bg-black text-white rounded py-2 w-full">Fight!</button>
+      </fieldset>
+  
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Combat Skill</legend>
+        <div class="flex flex-row gap-3">
+          <div class="w-6/12">
+            <label class="text-gray-500 text-xs">Base</label>
+            <input type="number" x-model="cs.base" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
+          <div class="w-6/12">
+            <label class="text-gray-500 text-xs">Bonus</label>
+            <input type="number" x-model="cs.bonus" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
         </div>
-      </div>
-      <button @click="combat" class="bg-black text-white rounded py-2 w-full">Fight!</button>
-    </fieldset>
-
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Combat Skill</legend>
-      <div class="flex flex-row gap-3">
-        <div class="w-6/12">
-          <label class="text-gray-500 text-xs">Base</label>
-          <input type="number" x-model="cs.base" class="w-full p-2 bg-gray-200 rounded mt-2">
+        <div class="text-gray-500 text-xs">Total: <span x-text="cs.total"></span></div>
+      </fieldset>
+  
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Endurance Points</legend>
+        <input type="range" min="0" x-bind:max="ep.total" x-model="ep.current" disabled />
+        <div class="flex flex-row gap-3">
+          <div class="w-4/12">
+            <label class="text-gray-500 text-xs">Base</label>
+            <input type="number" x-model="ep.base" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
+          <div class="w-4/12">
+            <label class="text-gray-500 text-xs">Bonus</label>
+            <input type="number" x-model="ep.bonus" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
+          <div class="w-4/12">
+            <label class="text-gray-500 text-xs">Current</label>
+            <input type="number" x-model="ep.current" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
         </div>
-        <div class="w-6/12">
-          <label class="text-gray-500 text-xs">Bonus</label>
-          <input type="number" x-model="cs.bonus" class="w-full p-2 bg-gray-200 rounded mt-2">
+      </fieldset>
+      
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Economy</legend>
+        <div class="flex flex-row gap-3">
+          <div class="w-6/12">
+            <label class="text-gray-500 text-xs">Belt Pouch</label>
+            <input type="number" x-model="pouch" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
+          <div class="w-6/12">
+            <label class="text-gray-500 text-xs">Meals</label>
+            <input type="number" x-model="meals" class="w-full p-2 bg-gray-200 rounded mt-2">
+          </div>
         </div>
-      </div>
-      <div class="text-gray-500 text-xs">Total: <span x-text="cs.total"></span></div>
-    </fieldset>
-
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Endurance Points</legend>
-      <input type="range" min="0" x-bind:max="ep.total" x-model="ep.current" disabled />
-      <div class="flex flex-row gap-3">
-        <div class="w-4/12">
-          <label class="text-gray-500 text-xs">Base</label>
-          <input type="number" x-model="ep.base" class="w-full p-2 bg-gray-200 rounded mt-2">
-        </div>
-        <div class="w-4/12">
-          <label class="text-gray-500 text-xs">Bonus</label>
-          <input type="number" x-model="ep.bonus" class="w-full p-2 bg-gray-200 rounded mt-2">
-        </div>
-        <div class="w-4/12">
-          <label class="text-gray-500 text-xs">Current</label>
-          <input type="number" x-model="ep.current" class="w-full p-2 bg-gray-200 rounded mt-2">
-        </div>
-      </div>
-    </fieldset>
-    
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Economy</legend>
-      <div class="flex flex-row gap-3">
-        <div class="w-6/12">
-          <label class="text-gray-500 text-xs">Belt Pouch</label>
-          <input type="number" x-model="pouch" class="w-full p-2 bg-gray-200 rounded mt-2">
-        </div>
-        <div class="w-6/12">
-          <label class="text-gray-500 text-xs">Meals</label>
-          <input type="number" x-model="meals" class="w-full p-2 bg-gray-200 rounded mt-2">
-        </div>
-      </div>
-    </fieldset>
-    
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Kai Disciplines</legend>
-      <ul class="list-none flex flex-col gap-2">
-        <template x-for="(discipline,index) in disciplines.kai">
-          <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
-            <input type="text" x-model="disciplines.kai[index]" class="bg-transparent flex-1">
-            <button @click="disciplines.kai.splice(index,1)">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-          </li>
-        </template>
-      </ul>
-      <button @click="disciplines.kai.push('')" class="flex gap-1 text-gray-500 text-xs">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Add discipline
-      </button>
-    </fieldset>
-    
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Bonus Disciplines</legend>
-      <ul class="list-none flex flex-col gap-2">
-        <template x-for="(discipline,index) in disciplines.bonus">
-          <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
-            <input type="text" x-model="disciplines.bonus[index]" class="bg-transparent flex-1">
-            <button @click="disciplines.bonus.splice(index,1)">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-          </li>
-        </template>
-      </ul>
-      <button @click="disciplines.bonus.push('')" class="flex gap-1 text-gray-500 text-xs">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Add discipline
-      </button>
-    </fieldset>
-    
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Weapons</legend>
-      <ul class="list-none flex flex-col gap-2">
-        <template x-for="(weapon,index) in weapons">
-          <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
-            <input type="text" x-model="weapons[index]" class="bg-transparent flex-1">
-            <button @click="weapons.splice(index,1)">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-          </li>
-        </template>
-      </ul>
-      <button @click="weapons.push('')" class="flex gap-1 text-gray-500 text-xs">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Add weapon
-      </button>
-    </fieldset>
-    
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Backpack Items</legend>
-      <ul class="list-none flex flex-col gap-2">
-        <template x-for="(item,index) in items.backpack">
-          <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
-            <input type="text" x-model="items.backpack[index]" class="bg-transparent flex-1">
-            <button @click="items.backpack.splice(index,1)">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-          </li>
-        </template>
-      </ul>
-      <button @click="items.backpack.push('')" class="flex gap-1 text-gray-500 text-xs">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Add item
-      </button>
-    </fieldset>
-    
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Special Items</legend>
-      <ul class="list-none flex flex-col gap-2">
-        <template x-for="(item,index) in items.special">
-          <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
-            <input type="text" x-model="items.special[index]" class="bg-transparent flex-1">
-            <button @click="items.special.splice(index,1)">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-          </li>
-        </template>
-      </ul>
-      <button @click="items.special.push('')" class="flex gap-1 text-gray-500 text-xs">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Add item
-      </button>
-    </fieldset>
-    
-    <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
-      <legend>Notes</legend>
-      <textarea x-model="notes" class="bg-gray-200 p-2 rounded"></textarea>
-    </fieldset>  
-  </div>
-
-  <script>
-    document.addEventListener('alpine:init', () => {
-      Alpine.data('gamedata', () => ({
-        cs: {
-          base: Alpine.$persist(0),
-          bonus: Alpine.$persist(0),
-          total() {
-            return parseInt(this.cs.base) + parseInt(this.cs.bonus)
-          }
-        },
-        ep: {
-          base: Alpine.$persist(0),
-          bonus: Alpine.$persist(0),
-          current: Alpine.$persist(0),
-          total() {
-            return parseInt(this.ep.base) + parseInt(this.ep.bonus)
+      </fieldset>
+      
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Kai Disciplines</legend>
+        <ul class="list-none flex flex-col gap-2">
+          <template x-for="(discipline,index) in disciplines.kai">
+            <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
+              <input type="text" x-model="disciplines.kai[index]" class="bg-transparent flex-1">
+              <button @click="disciplines.kai.splice(index,1)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+            </li>
+          </template>
+        </ul>
+        <button @click="disciplines.kai.push('')" class="flex gap-1 text-gray-500 text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Add discipline
+        </button>
+      </fieldset>
+      
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Bonus Disciplines</legend>
+        <ul class="list-none flex flex-col gap-2">
+          <template x-for="(discipline,index) in disciplines.bonus">
+            <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
+              <input type="text" x-model="disciplines.bonus[index]" class="bg-transparent flex-1">
+              <button @click="disciplines.bonus.splice(index,1)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+            </li>
+          </template>
+        </ul>
+        <button @click="disciplines.bonus.push('')" class="flex gap-1 text-gray-500 text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Add discipline
+        </button>
+      </fieldset>
+      
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Weapons</legend>
+        <ul class="list-none flex flex-col gap-2">
+          <template x-for="(weapon,index) in weapons">
+            <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
+              <input type="text" x-model="weapons[index]" class="bg-transparent flex-1">
+              <button @click="weapons.splice(index,1)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+            </li>
+          </template>
+        </ul>
+        <button @click="weapons.push('')" class="flex gap-1 text-gray-500 text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Add weapon
+        </button>
+      </fieldset>
+      
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Backpack Items</legend>
+        <ul class="list-none flex flex-col gap-2">
+          <template x-for="(item,index) in items.backpack">
+            <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
+              <input type="text" x-model="items.backpack[index]" class="bg-transparent flex-1">
+              <button @click="items.backpack.splice(index,1)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+            </li>
+          </template>
+        </ul>
+        <button @click="items.backpack.push('')" class="flex gap-1 text-gray-500 text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Add item
+        </button>
+      </fieldset>
+      
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Special Items</legend>
+        <ul class="list-none flex flex-col gap-2">
+          <template x-for="(item,index) in items.special">
+            <li class="bg-gray-200 rounded p-2 flex flex-row justify-between">
+              <input type="text" x-model="items.special[index]" class="bg-transparent flex-1">
+              <button @click="items.special.splice(index,1)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+            </li>
+          </template>
+        </ul>
+        <button @click="items.special.push('')" class="flex gap-1 text-gray-500 text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Add item
+        </button>
+      </fieldset>
+      
+      <fieldset class="border border-solid border-gray-300 p-3 flex flex-col gap-3">
+        <legend>Notes</legend>
+        <textarea x-model="notes" class="bg-gray-200 p-2 rounded"></textarea>
+      </fieldset>  
+    </div>
+  
+    <script>
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('gamedata', () => ({
+          cs: {
+            base: Alpine.$persist(0),
+            bonus: Alpine.$persist(0),
+            total() {
+              return parseInt(this.cs.base) + parseInt(this.cs.bonus)
+            }
           },
-        },
-        pouch: Alpine.$persist(0),
-        meals: Alpine.$persist(0),
-        weapons: Alpine.$persist([]),
-        items: {
-          backpack: Alpine.$persist([]),
-          special: Alpine.$persist([]),
-        },
-        disciplines: {
-          kai: Alpine.$persist(['foo', 'bar']),
-          bonus: Alpine.$persist([]),
-        },
-        enemy: {
-          cs: Alpine.$persist(0),
-          ep: Alpine.$persist(0),
-        },
-        combat() {
-
-          /* Add any extra points gained through your Kai Disciplines to your current COMBAT SKILL total. */
-          /* Subtract the COMBAT SKILL of your enemy from this total. The result is your Combat Ratio. */
-          let combat_ratio = (parseInt(this.cs.base) + parseInt(this.cs.bonus)) - parseInt(this.enemy.cs)
-
-          /* When you have your Combat Ratio, pick a number from the Random Number Table. */
-          let random = this.random()
-
-          let hero_table = {
-            '-11': [100, 100, 8, 8, 7, 6, 5, 4, 3, 0],
-            '-9': [100, 8, 7, 7, 6, 6, 5, 4, 3, 0],
-            '-7': [8, 7, 6, 6, 5, 5, 4, 3, 2, 0],
-            '-5': [6, 6, 5, 5, 4, 4, 3, 2, 0, 0],
-            '-3': [6, 5, 5, 4, 4, 3, 2, 1, 0, 0],
-            '-1': [5, 5, 4, 4, 3, 2, 2, 1, 0, 0],
-            '0': [5, 4, 4, 3, 2, 2, 1, 0, 0, 0],
-            '2': [5, 4, 3, 3, 2, 2, 1, 0, 0, 0],
-            '4': [4, 3, 3, 2, 2, 2, 1, 0, 0, 0],
-            '6': [4, 3, 3, 2, 2, 1, 0, 0, 0, 0],
-            '8': [4, 3, 2, 2, 2, 1, 0, 0, 0, 0],
-            '10': [3, 3, 2, 2, 2, 1, 0, 0, 0, 0],
-            '11': [3, 2, 2, 2, 1, 1, 0, 0, 0, 0],
-          }
-          let enemy_table = {
-            '-11': [0, 0, 0, 0, 1, 2, 3, 4, 5, 6],
-            '-9': [0, 0, 0, 1, 2, 3, 4, 5, 6],
-            '-7': [0, 0, 1, 2, 3, 4, 5, 6, 7, 8],
-            '-5': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-            '-3': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            '-1': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            '0': [3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            '2': [4, 5, 6, 7, 8, 9, 10, 11, 12, 14],
-            '4': [5, 6, 7, 8, 9, 10, 11, 12, 14, 16],
-            '6': [6, 7, 8, 9, 10, 11, 12, 14, 16, 18],
-            '8': [7, 8, 9, 10, 11, 12, 14, 16, 18, 100],
-            '10': [8, 9, 10, 11, 12, 14, 16, 18, 100, 100],
-            '11': [9, 10, 11, 12, 14, 16, 18, 100, 100, 100],
-          }
-
-          /* On the Action Chart, mark the changes in ENDURANCE points to the participants in the combat. */
-          let hero_closest = Object.keys(hero_table).sort((a, b) => Math.abs(combat_ratio - parseInt(a)) - Math.abs(combat_ratio - parseInt(b)))[0]
-          let hero_losses = hero_table[hero_closest][random];
-          let enemy_closest = Object.keys(enemy_table).sort((a, b) => Math.abs(combat_ratio - parseInt(a)) - Math.abs(combat_ratio - parseInt(b)))[0]
-          let enemy_losses = enemy_table[enemy_closest][random];
-
-          alert('Your random number is: ' + random + '\n' + 'Your combat ratio is: ' + combat_ratio + '\n' + 'Hero loses ' + hero_losses + ' ep \n' + 'Enemy loses ' + enemy_losses + ' ep')
-
-          this.ep.current = this.ep.current - hero_losses
-          this.enemy.ep = this.enemy.ep - enemy_losses
-
-          /* This process of combat continues until the ENDURANCE points of either the enemy or Lone Wolf are reduced to zero or below, at which point that combatant is declared dead. */
-          if (this.ep.current <= 0) {
-            alert('You are dead!')
-          }
-          if (this.enemy.ep <= 0) {
-            this.enemy.ep = 0
-            this.enemy.cs = 0
-            alert('Enemy dies!')
-          }
-        },
-        notes: Alpine.$persist(''),
-        random() {
-          return Math.floor(Math.random() * 9)
-        },
-      }))
-    })
-  </script>
-</body>
+          ep: {
+            base: Alpine.$persist(0),
+            bonus: Alpine.$persist(0),
+            current: Alpine.$persist(0),
+            total() {
+              return parseInt(this.ep.base) + parseInt(this.ep.bonus)
+            },
+          },
+          pouch: Alpine.$persist(0),
+          meals: Alpine.$persist(0),
+          weapons: Alpine.$persist([]),
+          items: {
+            backpack: Alpine.$persist([]),
+            special: Alpine.$persist([]),
+          },
+          disciplines: {
+            kai: Alpine.$persist(['foo', 'bar']),
+            bonus: Alpine.$persist([]),
+          },
+          enemy: {
+            cs: Alpine.$persist(0),
+            ep: Alpine.$persist(0),
+          },
+          combat() {
+  
+            /* Add any extra points gained through your Kai Disciplines to your current COMBAT SKILL total. */
+            /* Subtract the COMBAT SKILL of your enemy from this total. The result is your Combat Ratio. */
+            let combat_ratio = (parseInt(this.cs.base) + parseInt(this.cs.bonus)) - parseInt(this.enemy.cs)
+  
+            /* When you have your Combat Ratio, pick a number from the Random Number Table. */
+            let random = this.random()
+  
+            let hero_table = {
+              '-11': [100, 100, 8, 8, 7, 6, 5, 4, 3, 0],
+              '-9': [100, 8, 7, 7, 6, 6, 5, 4, 3, 0],
+              '-7': [8, 7, 6, 6, 5, 5, 4, 3, 2, 0],
+              '-5': [6, 6, 5, 5, 4, 4, 3, 2, 0, 0],
+              '-3': [6, 5, 5, 4, 4, 3, 2, 1, 0, 0],
+              '-1': [5, 5, 4, 4, 3, 2, 2, 1, 0, 0],
+              '0': [5, 4, 4, 3, 2, 2, 1, 0, 0, 0],
+              '2': [5, 4, 3, 3, 2, 2, 1, 0, 0, 0],
+              '4': [4, 3, 3, 2, 2, 2, 1, 0, 0, 0],
+              '6': [4, 3, 3, 2, 2, 1, 0, 0, 0, 0],
+              '8': [4, 3, 2, 2, 2, 1, 0, 0, 0, 0],
+              '10': [3, 3, 2, 2, 2, 1, 0, 0, 0, 0],
+              '11': [3, 2, 2, 2, 1, 1, 0, 0, 0, 0],
+            }
+            let enemy_table = {
+              '-11': [0, 0, 0, 0, 1, 2, 3, 4, 5, 6],
+              '-9': [0, 0, 0, 1, 2, 3, 4, 5, 6],
+              '-7': [0, 0, 1, 2, 3, 4, 5, 6, 7, 8],
+              '-5': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+              '-3': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+              '-1': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+              '0': [3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+              '2': [4, 5, 6, 7, 8, 9, 10, 11, 12, 14],
+              '4': [5, 6, 7, 8, 9, 10, 11, 12, 14, 16],
+              '6': [6, 7, 8, 9, 10, 11, 12, 14, 16, 18],
+              '8': [7, 8, 9, 10, 11, 12, 14, 16, 18, 100],
+              '10': [8, 9, 10, 11, 12, 14, 16, 18, 100, 100],
+              '11': [9, 10, 11, 12, 14, 16, 18, 100, 100, 100],
+            }
+  
+            /* On the Action Chart, mark the changes in ENDURANCE points to the participants in the combat. */
+            let hero_closest = Object.keys(hero_table).sort((a, b) => Math.abs(combat_ratio - parseInt(a)) - Math.abs(combat_ratio - parseInt(b)))[0]
+            let hero_losses = hero_table[hero_closest][random];
+            let enemy_closest = Object.keys(enemy_table).sort((a, b) => Math.abs(combat_ratio - parseInt(a)) - Math.abs(combat_ratio - parseInt(b)))[0]
+            let enemy_losses = enemy_table[enemy_closest][random];
+  
+            alert('Your random number is: ' + random + '\n' + 'Your combat ratio is: ' + combat_ratio + '\n' + 'Hero loses ' + hero_losses + ' ep \n' + 'Enemy loses ' + enemy_losses + ' ep')
+  
+            this.ep.current = this.ep.current - hero_losses
+            this.enemy.ep = this.enemy.ep - enemy_losses
+  
+            /* This process of combat continues until the ENDURANCE points of either the enemy or Lone Wolf are reduced to zero or below, at which point that combatant is declared dead. */
+            if (this.ep.current <= 0) {
+              alert('You are dead!')
+            }
+            if (this.enemy.ep <= 0) {
+              this.enemy.ep = 0
+              this.enemy.cs = 0
+              alert('Enemy dies!')
+            }
+          },
+          notes: Alpine.$persist(''),
+          random() {
+            return Math.floor(Math.random() * 9)
+          },
+        }))
+      })
+    </script>
+  </body>
 
 </html>
